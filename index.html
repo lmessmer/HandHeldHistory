@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>GEOG 576 Lab 3</title>
+  <title>HandHeldHistory</title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="description" content="" />
@@ -149,12 +149,12 @@
       view.ui.add(searchWidget, {position: "top-left", index: 0});
 
       const servicePopup = {
-        "title": "Amenity",
-        "content": "<b>Name:</b> {name}<br><b>Type of Service:</b> {amenity}<br><b>Hours:</b> {opening_hours}<br>"
+        "title": "Site",
+        "content": "<b>Name:</b> {RESNAME}<br><b>Date Added:</b> {SRC_DATE}<br><b>Link:</b> <a href='{Link}'>{Link}</a><br>"
       }
       const servicesLayer = new FeatureLayer({
-        url: "https://services6.arcgis.com/Do88DoK2xjTUCXd1/arcgis/rest/services/OSM_NA_Amenities/FeatureServer",
-        outFields: ["name", "amenity","opening_hours"],
+        url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/CRBP/FeatureServer",
+        outFields: ["RESNAME", "SRC_DATE","Link"],
         popupTemplate: servicePopup
       });
 
