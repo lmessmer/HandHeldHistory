@@ -82,7 +82,7 @@
       const searchWidget = new Search({ view: view});
       view.ui.add(searchWidget, {position: "top-left", index: 0});
 
-      let poiRenderer = {
+      let blueRenderer = {
         type: "simple",  
         symbol: {
         type: "simple-marker",  
@@ -90,24 +90,98 @@
         size: 10,
         color: "blue",
         outline: {  
-          width: 0.5,
+          width: 1,
+          color: "white"
+        }
+        }
+        };
+
+        let redRenderer = {
+        type: "simple",  
+        symbol: {
+        type: "simple-marker",  
+        style: "diamond",
+        size: 10,
+        color: "red",
+        outline: {  
+          width: 1,
+          color: "white"
+        }
+        }
+        };
+
+        let yellowRenderer = {
+        type: "simple",  
+        symbol: {
+        type: "simple-marker",  
+        style: "diamond",
+        size: 10,
+        color: "yellow",
+        outline: {  
+          width: 1,
+          color: "white"
+        }
+        }
+        };
+
+        let orangeRenderer = {
+        type: "simple",  
+        symbol: {
+        type: "simple-marker",  
+        style: "diamond",
+        size: 10,
+        color: "orange",
+        outline: {  
+          width: 1,
           color: "white"
         }
         }
         };
 
       const servicePopup = {
-        "title": "{RESNAME}",
-        "content": "<b>Type of Place:</b> {RESNAME}<br><b>Date Added:</b> {SRC_DATE}<br><b>More Information:</b> <a href='{Link}'>{Link}</a><br>"
+        "title": "{name}",
+        "content": "<b>Type of Place:</b> {type}<br><b>Date Added:</b> {add_date}<br><b>More Information:</b> <a href='{link}'>{link}</a><br>"
       }
-      const servicesLayer = new FeatureLayer({
-        url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/CRBP/FeatureServer",
-        outFields: ["RESNAME", "SRC_DATE","Link"],
+      const buildingLayer = new FeatureLayer({
+        url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Historic_Buildings/FeatureServer",
+        outFields: ["name","type", "add_date","link"],
         popupTemplate: servicePopup,
-        renderer: poiRenderer
+        renderer: blueRenderer
       });
 
-      map.add(servicesLayer);
+      const siteLayer = new FeatureLayer({
+        url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Historic_Sites/FeatureServer",
+        outFields: ["name", "type", "add_date","link"],
+        popupTemplate: servicePopup,
+        renderer: redRenderer
+      });
+
+      const structureLayer = new FeatureLayer({
+        url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Historic_Structures/FeatureServer",
+        outFields: ["name", "type", "add_date","link"],
+        popupTemplate: servicePopup,
+        renderer: yellowRenderer
+      });
+
+      const objectLayer = new FeatureLayer({
+        url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Historic_Objects/FeatureServer",
+        outFields: ["name", "type", "add_date","link"],
+        popupTemplate: servicePopup,
+        renderer: orangeRenderer
+      });
+
+      const districtLayer = new FeatureLayer({
+        url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Historic_District_Areas/FeatureServer",
+        outFields: ["name", "type", "add_date","link"],
+        popupTemplate: servicePopup
+      });
+
+      map.add(objectLayer);
+      map.add(structureLayer);
+      map.add(siteLayer);
+      map.add(districtLayer);
+      map.add(buildingLayer);
+      
 
       const layerList = new LayerList({
         view: view
