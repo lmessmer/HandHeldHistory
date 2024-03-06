@@ -27,9 +27,11 @@
       "esri/widgets/Legend",
       "esri/widgets/Expand",
       "esri/widgets/LayerList",
-      "esri/renderers/SimpleRenderer"
+      "esri/renderers/SimpleRenderer",
+      "esri/symbols/SimpleFillSymbol"
       
-    ], function(esriConfig, Map, MapView, Locate, BasemapGallery, PortalBasemapsSource, Search, Graphic, GraphicsLayer, FeatureLayer, Editor, Legend, Expand, LayerList, SimpleRenderer) {   
+    ], function(esriConfig, Map, MapView, Locate, BasemapGallery, PortalBasemapsSource, Search, Graphic, GraphicsLayer, 
+    FeatureLayer, Editor, Legend, Expand, LayerList, SimpleRenderer, SimpleFillSymbol) {   
 
       esriConfig.apiKey = "AAPKc722771c0ccc42f6b3a50f98f0541437noDYBlU0Z8XIJioQe0FCEDxsHh9fAgIj7WZTgQnwd8Iro4vn-CgJSPt4wG7YeNvj"
       const map = new Map({ 
@@ -138,6 +140,8 @@
         }
         };
 
+
+
       const servicePopup = {
         "title": "{name}",
         "content": "<b>Type of Place:</b> {type}<br><b>Date Added:</b> {add_date}<br><b>More Information:</b> <a href='{link}'>{link}</a><br>"
@@ -173,7 +177,17 @@
       const districtLayer = new FeatureLayer({
         url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Historic_District_Areas/FeatureServer",
         outFields: ["name", "type", "add_date","link"],
-        popupTemplate: servicePopup
+        popupTemplate: servicePopup,
+      });
+
+      districtLayer.renderer = new SimpleRenderer({
+        symbol: new SimpleFillSymbol({
+          color: "green",
+          style: "backward-diagonal",
+          outline: { color:"green", width:"1px"}
+          
+
+        })
       });
 
       map.add(objectLayer);
