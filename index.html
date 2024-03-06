@@ -188,6 +188,19 @@
         })
       });
 
+      const reviewPopup = {
+        "title": "User Review for {what_location}",
+        "content": "{experience}"
+      }
+
+      const reviewLayer = new FeatureLayer({
+        url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/survey123_9ec33f4be1c94a9dacef9497d5003974_form/FeatureServer",
+        outfields:["*"],
+        popupTemplate: reviewPopup,
+      });
+      reviewLayer.title = "User Reviews";
+
+      map.add(reviewLayer);
       map.add(objectLayer);
       map.add(structureLayer);
       map.add(siteLayer);
@@ -227,6 +240,26 @@
     #viewDiv {  
       padding: 0; margin: 0;  height: 95%;  width: 100%; bottom: 0;
     }  
+
+    .addRecordBtn {
+            position: absolute;
+            z-index: 10;
+            top: 150px;
+            right: 10px;
+            background-color: #0079c1;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .addRecordBtn:hover {
+            background-color: #005a87;
+        }
   </style> 
   
 
@@ -240,7 +273,7 @@
     Data derived from The National Parks Service database.</h2>
   </div>
 
-
+  <a href="https://arcg.is/0rmiGy"target="_blank" class="addRecordBtn">Add<br>Review</a>
   <div id="viewDiv"></div> 
 </body>
 </html>
