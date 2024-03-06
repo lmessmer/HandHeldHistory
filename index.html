@@ -77,10 +77,10 @@
           view: view,
           content: basemapGallery
         });
-      view.ui.add(basemapExpand, "bottom-right" )
+      view.ui.add(basemapExpand, {position:"top-right", index:0})
 
       const searchWidget = new Search({ view: view});
-      view.ui.add(searchWidget, {position: "top-left", index: 0});
+      view.ui.add(searchWidget, {position: "top-left", index:0});
 
       let blueRenderer = {
         type: "simple",  
@@ -194,7 +194,7 @@
       }
 
       const reviewLayer = new FeatureLayer({
-        url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/survey123_9ec33f4be1c94a9dacef9497d5003974_form/FeatureServer",
+        url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/survey123_93fe671434e040ad82f42382ca9be7a7_results/FeatureServer",
         outfields:["*"],
         popupTemplate: reviewPopup,
       });
@@ -216,7 +216,7 @@
         view: view,
         content: layerList
       });
-      view.ui.add(layerListExpand, "bottom-right")
+      view.ui.add(layerListExpand, {position:"bottom-right", index: 1})
 
       const legend = new Legend({
         view: view
@@ -225,7 +225,7 @@
         expandIcon: "legend",
         view: view,
         content: legend});
-      view.ui.add(legendExpand, "bottom-left");
+      view.ui.add(legendExpand, {position: "bottom-right", index: 0});
     
 
     });  
@@ -244,8 +244,8 @@
     .addRecordBtn {
             position: absolute;
             z-index: 10;
-            top: 150px;
-            right: 10px;
+            bottom: 100px;
+            left: 10px;
             background-color: #0079c1;
             color: white;
             padding: 8px 16px;
@@ -273,7 +273,7 @@
     Data derived from The National Parks Service database.</h2>
   </div>
 
-  <a href="https://arcg.is/0rmiGy"target="_blank" class="addRecordBtn">Add<br>Review</a>
+  <a href="https://arcg.is/1TPLez"target="_blank" class="addRecordBtn">Add<br>Review</a>
   <div id="viewDiv"></div> 
 </body>
 </html>
