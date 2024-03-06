@@ -47,10 +47,10 @@
       
 
 
-      const locateBtn = new Locate({view: view});
-      view.ui.add(locateBtn, {position: "top-left"});
+      const locateBtn = new Locate({view: view});  
+      view.ui.add(locateBtn, {position: "top-left"});  //create and add location button
 
-
+      //creates basemap gallery
       const basemapGallery = new BasemapGallery({
         view: view,
         source: {
@@ -71,7 +71,7 @@
             return bool;
           }}
         });
-
+        //adds an expanding widget
         const basemapExpand = new Expand({
           expandIcon: "basemap",
           view: view,
@@ -79,9 +79,12 @@
         });
       view.ui.add(basemapExpand, {position:"top-right", index:0})
 
+      //adds search widget
       const searchWidget = new Search({ view: view});
       view.ui.add(searchWidget, {position: "top-left", index:0});
 
+
+      //creates different color point renderers
       let blueRenderer = {
         type: "simple",  
         symbol: {
@@ -96,7 +99,7 @@
         }
         };
 
-        let redRenderer = {
+      let redRenderer = {
         type: "simple",  
         symbol: {
         type: "simple-marker",  
@@ -110,7 +113,7 @@
         }
         };
 
-        let yellowRenderer = {
+      let yellowRenderer = {
         type: "simple",  
         symbol: {
         type: "simple-marker",  
@@ -124,7 +127,7 @@
         }
         };
 
-        let orangeRenderer = {
+      let orangeRenderer = {
         type: "simple",  
         symbol: {
         type: "simple-marker",  
@@ -139,11 +142,13 @@
         };
 
 
-
+      //defines format of site popups
       const servicePopup = {
         "title": "{name}",
         "content": "<b>Type of Place:</b> {type}<br><b>Date Added:</b> {add_date}<br><b>More Information:</b> <a href='{link}'>{link}</a><br>"
       }
+
+      //creates feature layers for buildings, sites, structures, objects, and districts
       const buildingLayer = new FeatureLayer({
         url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Historic_Buildings/FeatureServer",
         outFields: ["name","type", "add_date","link"],
@@ -178,6 +183,7 @@
         popupTemplate: servicePopup,
       });
 
+      //creates unique renderer for district polygons
       districtLayer.renderer = new SimpleRenderer({
         symbol: new SimpleFillSymbol({
           color: "green",
@@ -188,18 +194,23 @@
         })
       });
 
+      //creates uniqe popup format for user reviews
       const reviewPopup = {
         "title": "User Review for {what_location}",
         "content": "{experience}"
       }
 
+      //constructs feature layer for reviews
       const reviewLayer = new FeatureLayer({
         url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/survey123_93fe671434e040ad82f42382ca9be7a7_results/FeatureServer",
         outfields:["*"],
         popupTemplate: reviewPopup,
       });
+
+      //defines the title of the layer as "User Reviews" as viewed in legend and layer list
       reviewLayer.title = "User Reviews";
 
+      //adds the previously created layers to map
       map.add(reviewLayer);
       map.add(objectLayer);
       map.add(structureLayer);
@@ -208,6 +219,7 @@
       map.add(buildingLayer);
       
 
+      //creates layer list and expander widget
       const layerList = new LayerList({
         view: view
       });
@@ -265,6 +277,7 @@
 
 </head>
 <body>
+
 
   <div>
   <h1 style="text-align:center;font-size:100%;line-height: 5px;top:0;">Welcome to HandHeldHistory!</h1>
