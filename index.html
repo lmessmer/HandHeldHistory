@@ -24,9 +24,12 @@
       "esri/layers/GraphicsLayer",
       "esri/layers/FeatureLayer",
       "esri/widgets/Editor",
-      "esri/widgets/Legend"
+      "esri/widgets/Legend",
+      "esri/widgets/Expand",
+      "esri/widgets/LayerList",
+      "esri/renderers/SimpleRenderer"
       
-    ], function(esriConfig, Map, MapView, Locate, BasemapGallery, PortalBasemapsSource, Search, Graphic, GraphicsLayer, FeatureLayer, Editor, Legend) {   
+    ], function(esriConfig, Map, MapView, Locate, BasemapGallery, PortalBasemapsSource, Search, Graphic, GraphicsLayer, FeatureLayer, Editor, Legend, Expand, LayerList, SimpleRenderer) {   
 
       esriConfig.apiKey = "AAPKc722771c0ccc42f6b3a50f98f0541437noDYBlU0Z8XIJioQe0FCEDxsHh9fAgIj7WZTgQnwd8Iro4vn-CgJSPt4wG7YeNvj"
       const map = new Map({ 
@@ -43,81 +46,6 @@
       const graphicsLayer = new GraphicsLayer();  
       map.add(graphicsLayer);
 
-      const point = { 
-      type: "point",  
-      longitude: -88.84182,
-      latitude: 42.9254
-      };
-
-      const simpleMarkerSymbol = {  
-        type: "simple-marker",  
-        style: "square",
-        color: [0, 0, 100],
-        outline: {  
-        color: [0, 0, 0],
-        width: 0
-      }};
-
-      const popupTemplate = {
-        title: "{Name}",
-        content: "{Description}"
-      }
-
-      const attributes = {
-        Name: "Fort Atkinson Train Station",
-        Description: "This is the former location of the Fort Atkinson train station. Service ended in 1950."
-      }
-
-      const pointGraphic = new Graphic({  
-        geometry: point,  
-        symbol: simpleMarkerSymbol,
-        attributes: attributes,
-        popupTemplate: popupTemplate
-      });
-      graphicsLayer.add(pointGraphic);
-
-      const polyline = {
-        type: "polyline",
-        paths:[
-        [-88.841611, 42.925876], 
-        [-88.842162, 42.925019], 
-        [-88.842317, 42.924720],
-        [-88.842856, 42.924039]
-      ]};
-      const lineSymbol = {
-        type: "simple-line",
-        color: [0,0,254],
-        width: 4
-      };
-
-      const lineAtt = {
-        Name: "Walking Trail"};
-
-      const polylineGraphic = new Graphic({
-        geometry: polyline,
-        symbol: lineSymbol,
-        attributes: lineAtt
-      })
-      graphicsLayer.add(polylineGraphic);
-
-      const polygon = {
-        type: "polygon",
-        rings: [[-88.8412,42.9215],[-88.843940,42.9215],[-88.843940,42.92],[-88.8412,42.92],[-88.8412,42.9215]]};
-
-      const fillSymbol = {
-        type: "simple-fill",
-        color: [254,0,0,.5],
-        outline: {
-          color: [254,0,0],
-          width: 1
-        }
-      };
-
-      const polygonGraphic = new Graphic({
-        geometry: polygon,
-        symbol: fillSymbol
-      });
-      graphicsLayer.add(polygonGraphic)
 
       const locateBtn = new Locate({view: view});
       view.ui.add(locateBtn, {position: "top-left"});
@@ -143,85 +71,45 @@
             return bool;
           }}
         });
-      view.ui.add(basemapGallery, {position: "top-right" });
+
+        const basemapExpand = new Expand({
+          expandIcon: "basemap",
+          view: view,
+          content: basemapGallery
+        });
+      view.ui.add(basemapExpand, "top-right" )
 
       const searchWidget = new Search({ view: view});
       view.ui.add(searchWidget, {position: "top-left", index: 0});
 
+      let poiRenderer = {
+        type: "simple",  
+        symbol: {
+        type: "simple-marker",  
+        style: "diamond",
+        size: 10,
+        color: "blue",
+        outline: {  
+          width: 0.5,
+          color: "white"
+        }
+        }
+        };
+
       const servicePopup = {
-        "title": "Site",
-        "content": "<b>Name:</b> {RESNAME}<br><b>Date Added:</b> {SRC_DATE}<br><b>Link:</b> <a href='{Link}'>{Link}</a><br>"
+        "title": "{RESNAME}",
+        "content": "<b>Type of Place:</b> {RESNAME}<br><b>Date Added:</b> {SRC_DATE}<br><b>More Information:</b> <a href='{Link}'>{Link}</a><br>"
       }
       const servicesLayer = new FeatureLayer({
         url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/CRBP/FeatureServer",
         outFields: ["RESNAME", "SRC_DATE","Link"],
-        popupTemplate: servicePopup
+        popupTemplate: servicePopup,
+        renderer: poiRenderer
       });
 
       map.add(servicesLayer);
 
-      const airfieldPopup = {
-        "title": "Airport",
-        "content": "<b>Facility Name:</b> {Fac_Name}<br><b>Flight Services:</b> {Fss_Name}<br>"
-      }
 
-      const airoprtRenderer = {
-        "type": "simple",
-        "symbol": {
-          "type": "picture-marker",
-          "url": "https://lmessmer.github.io/agolrest/outline_local_airport_black_24dp.png",
-          "width": "18px",
-          "height": "18px"
-        }
-      }
-
-      const airfieldLayer = new FeatureLayer({
-        url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/lmessmer_airfield_locations/FeatureServer",
-        outFields: ["Fac_Name", "Fss_Name"],
-        popupTemplate: airfieldPopup,
-        renderer: airoprtRenderer,
-        definitionExpression: "Fac_Type = 'AIRPORT'"
-      });
-      map.add(airfieldLayer);
-
-      const heliportPopup = {
-        "title": "Heliport",
-        "content": "<b>Facility Name:</b> {Fac_Name}<br><b>Flight Services:</b> {Fss_Name}<br>"
-      }
-
-      const heliportRenderer = {
-        "type": "simple",
-        "symbol": {
-          "type": "picture-marker",
-          "url": "https://lmessmer.github.io/agolrest/helicopter-icon-21952.png",
-          "width": "18px",
-          "height": "18px"
-        }
-      }
-
-      const heliportLayer = new FeatureLayer({
-        url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/lmessmer_airfield_locations/FeatureServer",
-        outFields: ["Fac_Name", "Fss_Name"],
-        popupTemplate: heliportPopup,
-        renderer: heliportRenderer,
-        definitionExpression: "Fac_Type = 'HELIPORT'"
-      });
-      map.add(heliportLayer);
-
-      const myAirports = new FeatureLayer({
-        url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Airports_Messmer/FeatureServer",
-        outfields: ["AirportCode"]
-      });
-      map.add(myAirports);
-
-      const pointInfos = {
-        layer: myAirports
-      }
-      const editor = new Editor({
-        view: view,
-        layerInfos: [pointInfos]
-      });
-      view.ui.add(editor, "bottom-left");
 
       const legend = new Legend({
         view: view
@@ -241,14 +129,20 @@
     html,  
     body,  
     #viewDiv {  
-      padding: 0;  margin: 0;  height: 100%;  width: 100%;  
+      padding: 0;  margin: 0;  height: 95%;  width: 100%;  
     }  
   </style> 
 
 
 </head>
 <body>
-  <!-- displays map -->
+
+  <div>
+  <h1 style="text-align:center;font-size:90%">Welcome to HandHeldHistory!</h1>
+  <h2 style = "text-align:center;font-size:80%;">Here you can find Wisconsin sites on the National Register of Historic Places.</h2>
+  </div>
+
+
   <div id="viewDiv"></div> 
 </body>
 </html>
