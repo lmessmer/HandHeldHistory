@@ -11,7 +11,8 @@
 
 
  
-  <script>  
+
+  <script> //adds all require statements
     require([
       "esri/config", 
       "esri/Map", 
@@ -30,9 +31,11 @@
       "esri/renderers/SimpleRenderer",
       "esri/symbols/SimpleFillSymbol"
       
+      //adds all parameters of require statements
     ], function(esriConfig, Map, MapView, Locate, BasemapGallery, PortalBasemapsSource, Search, Graphic, GraphicsLayer, 
     FeatureLayer, Editor, Legend, Expand, LayerList, SimpleRenderer, SimpleFillSymbol) {   
-
+      
+      //sets the api key and configure the basemap and map view
       esriConfig.apiKey = "AAPKc722771c0ccc42f6b3a50f98f0541437noDYBlU0Z8XIJioQe0FCEDxsHh9fAgIj7WZTgQnwd8Iro4vn-CgJSPt4wG7YeNvj"
       const map = new Map({ 
         basemap: "arcgis-light-gray"
@@ -45,8 +48,6 @@
           container: "viewDiv"
       });
       
-
-
       const locateBtn = new Locate({view: view});  
       view.ui.add(locateBtn, {position: "top-left"});  //create and add location button
 
